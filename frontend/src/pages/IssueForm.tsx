@@ -4,10 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import { 
   MapPin, 
-  Upload, 
   X, 
   Camera,
-  AlertCircle,
   CheckCircle
 } from 'lucide-react'
 import { api } from '../services/api'
@@ -19,10 +17,8 @@ const IssueForm = () => {
   const [images, setImages] = useState<File[]>([])
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null)
   const [isGettingLocation, setIsGettingLocation] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<IssueCategory | null>(null)
-  const [selectedPriority, setSelectedPriority] = useState<IssuePriority | null>(null)
 
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<CreateIssueData>()
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<CreateIssueData>()
 
   const createIssueMutation = useMutation(
     async (data: CreateIssueData) => {
@@ -33,7 +29,7 @@ const IssueForm = () => {
       formData.append('priority', data.priority)
       formData.append('location', JSON.stringify(data.location))
       
-      images.forEach((image, index) => {
+      images.forEach((image) => {
         formData.append(`images`, image)
       })
 
@@ -67,8 +63,6 @@ const IssueForm = () => {
         const { latitude, longitude } = position.coords
         
         try {
-          // For demo purposes, we'll use a simple address format
-          // In production, you would use a geocoding service like OpenCage, Google Maps, etc.
           const address = `Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
           setLocation({ lat: latitude, lng: longitude, address })
           setValue('location', {
@@ -110,11 +104,11 @@ const IssueForm = () => {
       return true
     })
     
-    setImages(prev => [...prev, ...validFiles].slice(0, 5)) // Max 5 images
+    setImages(prev => [...prev, ...validFiles].slice(0, 5))
   }
 
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index))
+  const removeImage = (imageIndex: number) => {
+    setImages(prev => prev.filter((_, i) => i !== imageIndex))
   }
 
   const onSubmit = (data: CreateIssueData) => {
@@ -123,12 +117,12 @@ const IssueForm = () => {
       return
     }
 
-    if (!selectedCategory) {
+    if (!data.category) {
       toast.error('Please select a category')
       return
     }
 
-    if (!selectedPriority) {
+    if (!data.priority) {
       toast.error('Please select a priority')
       return
     }
@@ -140,8 +134,6 @@ const IssueForm = () => {
 
     createIssueMutation.mutate({
       ...data,
-      category: selectedCategory,
-      priority: selectedPriority,
       images
     })
   }
@@ -175,11 +167,9 @@ const IssueForm = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        {/* Basic Information */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Basic Information</h3>
           
-          {/* Title */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Issue Title *
@@ -194,9 +184,9 @@ const IssueForm = () => {
               <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
             )}
           </div>
+        </div>
 
-        {/* Description */}
-        <div>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Description *
           </label>
@@ -211,8 +201,7 @@ const IssueForm = () => {
           )}
         </div>
 
-        {/* Category */}
-        <div>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Category *
           </label>
@@ -226,7 +215,7 @@ const IssueForm = () => {
                   {...register('category', { required: 'Category is required' })}
                   type="radio"
                   value={category.value}
-                  className="sr-only"
+                  className="mr-2"
                 />
                 <div className="text-2xl mr-2">{category.icon}</div>
                 <span className="text-sm font-medium">{category.label}</span>
@@ -238,8 +227,7 @@ const IssueForm = () => {
           )}
         </div>
 
-        {/* Priority */}
-        <div>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Priority *
           </label>
@@ -253,7 +241,7 @@ const IssueForm = () => {
                   {...register('priority', { required: 'Priority is required' })}
                   type="radio"
                   value={priority.value}
-                  className="sr-only"
+                  className="mr-2"
                 />
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${priority.color}`}>
                   {priority.label}
@@ -266,7 +254,6 @@ const IssueForm = () => {
           )}
         </div>
 
-        {/* Location */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Location</h3>
           
@@ -314,7 +301,6 @@ const IssueForm = () => {
           </div>
         </div>
 
-        {/* Images */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Photos</h3>
           
@@ -361,8 +347,8 @@ const IssueForm = () => {
           </div>
         </div>
 
-        {/* Submit */}
-        <div className="flex gap-4">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <div className="flex gap-4">
           <button
             type="button"
             onClick={() => navigate('/citizen')}
@@ -384,6 +370,7 @@ const IssueForm = () => {
               'Report Issue'
             )}
           </button>
+          </div>
         </div>
       </form>
     </div>

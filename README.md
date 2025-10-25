@@ -1,276 +1,195 @@
 # Citizen Issue Tracker
 
-A comprehensive web application for citizens to report and track local issues like potholes, garbage, streetlight failures, and more. The system includes separate dashboards for citizens and administrators/authorities.
+A comprehensive web application for citizens to report local issues (potholes, garbage, streetlight failures, etc.) and for authorities to manage and track these issues.
 
-## Features
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- Python 3.8+
+- MongoDB Atlas account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd MASAIxNOBROKERhack
+   ```
+
+2. **Setup Environment Variables**
+   - Copy `env_template.txt` to `backend/.env`
+   - Update the API keys and configuration as needed
+
+3. **Install Dependencies**
+
+   **Backend:**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+   **Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+4. **Run the Application**
+
+   **Start Backend Server:**
+   ```bash
+   cd backend
+   python -m uvicorn main:app --reload --port 8000
+   ```
+
+   **Start Frontend Server:**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+5. **Access the Application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+
+## 📋 Features
 
 ### For Citizens
-- **Issue Reporting**: Report various types of issues with photos and location
-- **Issue Tracking**: Track the status of reported issues (Pending, In Progress, Completed)
-- **Real-time Updates**: Receive updates on issue progress
-- **User Profile**: Manage personal information and view statistics
+- **Report Issues**: Upload photos and details of local problems
+- **Track Progress**: Monitor status updates on reported issues
+- **View Updates**: Receive notifications and comments from authorities
+- **Profile Management**: Update personal information
 
-### For Administrators/Authorities
-- **Issue Management**: View and manage all reported issues
-- **Status Updates**: Update issue status and add progress notes
-- **Analytics Dashboard**: View statistics and charts for better insights
-- **User Management**: Manage user accounts and permissions
-- **Assignment**: Assign issues to specific team members
+### For Administrators
+- **Issue Management**: View, assign, and update issue status
+- **Dashboard Analytics**: Statistics and progress tracking
+- **User Management**: Handle citizen accounts and permissions
+- **Email Notifications**: Automated updates to citizens
 
-## Technology Stack
+## 🔧 Configuration
 
-### Frontend
-- **React 18** with TypeScript
-- **Vite** for fast development and building
-- **Tailwind CSS** for styling
-- **React Router** for navigation
-- **React Query** for data fetching
-- **React Hook Form** for form handling
-- **Lucide React** for icons
-- **Recharts** for data visualization
+### Environment Variables
 
-### Backend
-- **FastAPI** (Python 3.8+)
-- **MongoDB** with Motor (async driver)
-- **Pydantic** for data validation
-- **JWT** for authentication
-- **Bcrypt** for password hashing
-- **Python-multipart** for file uploads
+Create a `backend/.env` file with the following variables:
 
-## Project Structure
+```env
+# MongoDB Configuration
+MONGODB_URL=your_mongodb_connection_string
+DATABASE_NAME=citizen_issue_tracker
+
+# SendGrid Email Configuration
+SENDGRID_API_KEY=your_sendgrid_api_key
+FROM_EMAIL=noreply@yourdomain.com
+FROM_NAME=Your App Name
+
+# JWT Configuration
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Server Configuration
+BACKEND_PORT=8000
+FRONTEND_PORT=3000
+```
+
+### Database Setup
+
+The application automatically connects to MongoDB Atlas. Ensure your connection string is correct in the environment variables.
+
+## 🏗️ Project Structure
 
 ```
-citizen-issue-tracker/
-├── frontend/                 # React frontend
+├── backend/
+│   ├── routers/          # API route handlers
+│   ├── models.py         # Pydantic data models
+│   ├── auth.py           # Authentication utilities
+│   ├── database.py       # Database connection
+│   ├── email_service.py  # Email notification service
+│   └── main.py           # FastAPI application
+├── frontend/
 │   ├── src/
-│   │   ├── components/      # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── contexts/       # React contexts
-│   │   ├── services/       # API services
-│   │   ├── types/          # TypeScript types
-│   │   └── main.tsx        # Entry point
-│   ├── package.json
-│   └── vite.config.ts
-├── backend/                 # FastAPI backend
-│   ├── routers/            # API routes
-│   ├── models.py           # Pydantic models
-│   ├── auth.py             # Authentication utilities
-│   ├── database.py         # Database connection
-│   ├── main.py             # FastAPI app
-│   └── requirements.txt
+│   │   ├── components/   # Reusable UI components
+│   │   ├── pages/        # Page components
+│   │   ├── contexts/     # React contexts
+│   │   ├── hooks/        # Custom React hooks
+│   │   ├── services/     # API services
+│   │   └── types/        # TypeScript type definitions
+│   └── public/           # Static assets
 └── README.md
 ```
 
-## Installation & Setup
+## 🔐 Authentication
 
-### Prerequisites
-- Node.js 18+ and npm
-- Python 3.8+
-- MongoDB 4.4+
+### User Roles
+- **Citizen**: Can report issues and view their own reports
+- **Admin**: Can manage all issues and user accounts
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd citizen-issue-tracker
-```
+### Default Admin Account
+- Email: `admin@example.com`
+- Password: `admin123`
 
-### 2. Install Dependencies
-```bash
-# Install all dependencies
-npm run install:all
+## 📧 Email Notifications
 
-# Or install separately:
-# Frontend
-cd frontend && npm install
+The system sends automated emails for:
+- Welcome messages on registration
+- Login notifications for security
+- Issue status updates
+- New comments on issues
 
-# Backend
-cd backend && pip install -r requirements.txt
-```
+## 🛠️ Development
 
-### 3. MongoDB Setup
-See [MongoDB Setup Guide](#mongodb-setup-guide) below.
+### Backend Development
+- Framework: FastAPI
+- Database: MongoDB with Motor (async driver)
+- Authentication: JWT tokens
+- Email: SendGrid integration
 
-### 4. Environment Configuration
-```bash
-# Copy environment file
-cp backend/env.example backend/.env
+### Frontend Development
+- Framework: React 18 with TypeScript
+- Build Tool: Vite
+- Styling: Tailwind CSS
+- State Management: React Query
+- Forms: React Hook Form
+- Icons: Lucide React
 
-# Edit the .env file with your configuration
-```
+### API Endpoints
 
-### 5. Run the Application
-```bash
-# Start both frontend and backend
-npm run dev
+**Authentication:**
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `GET /auth/me` - Get current user
 
-# Or start separately:
-# Frontend (port 3000)
-npm run dev:frontend
-
-# Backend (port 8000)
-npm run dev:backend
-```
-
-## MongoDB Setup Guide
-
-### Option 1: Local MongoDB Installation
-
-#### Windows
-1. Download MongoDB Community Server from [mongodb.com](https://www.mongodb.com/try/download/community)
-2. Run the installer and follow the setup wizard
-3. Start MongoDB service:
-   ```cmd
-   net start MongoDB
-   ```
-
-#### macOS
-```bash
-# Install using Homebrew
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb/brew/mongodb-community
-```
-
-#### Linux (Ubuntu/Debian)
-```bash
-# Import MongoDB public key
-wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-
-# Create list file
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-
-# Update package database
-sudo apt-get update
-
-# Install MongoDB
-sudo apt-get install -y mongodb-org
-
-# Start MongoDB
-sudo systemctl start mongod
-sudo systemctl enable mongod
-```
-
-### Option 2: MongoDB Atlas (Cloud)
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a free account
-3. Create a new cluster
-4. Get your connection string
-5. Update `MONGODB_URL` in your `.env` file
-
-### Option 3: Docker
-```bash
-# Run MongoDB in Docker
-docker run -d -p 27017:27017 --name mongodb mongo:latest
-
-# Or with persistent storage
-docker run -d -p 27017:27017 --name mongodb -v mongodb_data:/data/db mongo:latest
-```
-
-### Database Configuration
-1. MongoDB will be accessible at `mongodb://localhost:27017`
-2. The application will automatically create the database `citizen_issue_tracker`
-3. Collections will be created automatically when data is inserted
-
-## API Documentation
-
-Once the backend is running, visit `http://localhost:8000/docs` for interactive API documentation.
-
-### Key Endpoints
-
-#### Authentication
-- `POST /auth/register` - Register new user
-- `POST /auth/login` - Login user
-- `GET /auth/me` - Get current user info
-- `PUT /auth/profile` - Update user profile
-
-#### Issues
-- `GET /issues` - Get user's issues (citizens) or all issues (admins)
+**Issues:**
+- `GET /issues` - List issues
 - `POST /issues` - Create new issue
 - `GET /issues/{id}` - Get issue details
 - `PUT /issues/{id}` - Update issue
 - `POST /issues/{id}/comments` - Add comment
-- `POST /issues/{id}/progress` - Add progress update
 
-#### Admin
-- `GET /admin/issues` - Get all issues with filters
-- `GET /admin/stats` - Get dashboard statistics
-- `PUT /admin/issues/{id}/assign` - Assign issue to user
+**Admin:**
+- `GET /admin/issues` - Admin issue management
+- `GET /admin/stats` - Dashboard statistics
 
-## Usage
+## 🚀 Deployment
 
-### For Citizens
-1. Register/Login to the application
-2. Click "Report New Issue" to create a new issue
-3. Fill in the issue details, upload photos, and set location
-4. Track your issues in the dashboard
-5. View detailed information and add comments
+### Backend Deployment
+1. Set up production environment variables
+2. Use a production ASGI server like Gunicorn
+3. Configure reverse proxy (Nginx)
+4. Set up SSL certificates
 
-### For Administrators
-1. Login with admin credentials
-2. View the admin dashboard with statistics
-3. Manage all reported issues
-4. Update issue status and add progress notes
-5. Assign issues to team members
+### Frontend Deployment
+1. Build the production bundle: `npm run build`
+2. Serve static files with a web server
+3. Configure API endpoint URLs
 
-## Development
+## 🔒 Security Considerations
 
-### Frontend Development
-```bash
-cd frontend
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-```
-
-### Backend Development
-```bash
-cd backend
-uvicorn main:app --reload    # Start development server
-python -m pytest            # Run tests (if implemented)
-```
-
-### Code Structure
-- **Frontend**: Component-based architecture with TypeScript
-- **Backend**: FastAPI with async/await patterns
-- **Database**: MongoDB with Motor async driver
-- **Authentication**: JWT tokens with role-based access
-
-## Deployment
-
-### Frontend (Vercel/Netlify)
-1. Build the frontend: `npm run build`
-2. Deploy the `dist` folder to your hosting service
-3. Update API URLs in production
-
-### Backend (Railway/Heroku/DigitalOcean)
-1. Set environment variables
-2. Deploy the backend code
-3. Ensure MongoDB is accessible
-4. Configure CORS for your frontend domain
-
-### Database
-- Use MongoDB Atlas for production
-- Set up proper authentication and network access
-- Configure backups and monitoring
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-For support and questions, please open an issue in the repository.
-
----
-
-**Note**: This is a demo application. For production use, ensure proper security measures, error handling, and testing are implemented.
+- Change default admin credentials
+- Use strong JWT secret keys
+- Implement rate limiting
+- Validate file uploads
+- Use HTTPS in production
+- Regular security updates
