@@ -9,7 +9,7 @@ from database import get_database
 
 router = APIRouter()
 
-@router.get("/issues", response_model=List[IssueResponse])
+@router.get("/issues")
 async def get_all_issues(
     search: Optional[str] = None,
     status: Optional[str] = None,
@@ -50,7 +50,25 @@ async def get_all_issues(
     # Get issues
     issues = []
     async for issue in db.issues.find(query).sort("created_at", -1):
-        issues.append(IssueResponse(**issue))
+        # Convert ObjectId to string and prepare response
+        issue_dict = {
+            "id": str(issue["_id"]),
+            "title": issue["title"],
+            "description": issue["description"],
+            "category": issue["category"],
+            "priority": issue["priority"],
+            "status": issue["status"],
+            "location": issue["location"],
+            "images": issue.get("images", []),
+            "reported_by": issue["reported_by"],
+            "assigned_to": issue.get("assigned_to"),
+            "created_at": issue["created_at"],
+            "updated_at": issue["updated_at"],
+            "resolved_at": issue.get("resolved_at"),
+            "comments": issue.get("comments", []),
+            "progress": issue.get("progress", [])
+        }
+        issues.append(issue_dict)
     
     return issues
 

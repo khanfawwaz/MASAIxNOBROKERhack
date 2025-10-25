@@ -69,10 +69,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post('/auth/login', { email, password })
-      const { token, user: userData } = response.data
+      const { access_token, user: userData } = response.data
       
-      localStorage.setItem('token', token)
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      localStorage.setItem('token', access_token)
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
       setUser(userData)
     } catch (error: any) {
       throw new Error(error.response?.data?.detail || 'Login failed')
@@ -82,10 +82,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (userData: RegisterData) => {
     try {
       const response = await api.post('/auth/register', userData)
-      const { token, user: newUser } = response.data
+      const { access_token, user: newUser } = response.data
       
-      localStorage.setItem('token', token)
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      localStorage.setItem('token', access_token)
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
       setUser(newUser)
     } catch (error: any) {
       throw new Error(error.response?.data?.detail || 'Registration failed')

@@ -5,15 +5,12 @@ from contextlib import asynccontextmanager
 import motor.motor_asyncio
 from pymongo import MongoClient
 import os
-from dotenv import load_dotenv
 
 from routers import auth, issues, admin
 from database import get_database
 
-load_dotenv()
-
 # MongoDB connection
-MONGO_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+MONGO_URL = os.getenv("MONGODB_URL", "mongodb+srv://Oratio:Ol3p6g2M1Q70hDzL@my-city.yasqkwz.mongodb.net/?appName=My-City")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "citizen_issue_tracker")
 
 @asynccontextmanager
@@ -35,7 +32,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

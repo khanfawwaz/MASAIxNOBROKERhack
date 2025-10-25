@@ -19,6 +19,8 @@ const IssueForm = () => {
   const [images, setImages] = useState<File[]>([])
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null)
   const [isGettingLocation, setIsGettingLocation] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<IssueCategory | null>(null)
+  const [selectedPriority, setSelectedPriority] = useState<IssuePriority | null>(null)
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<CreateIssueData>()
 
@@ -65,29 +67,17 @@ const IssueForm = () => {
         const { latitude, longitude } = position.coords
         
         try {
-          // Reverse geocoding to get address
-          const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=YOUR_OPENCAGE_API_KEY`
-          )
-          const data = await response.json()
-          
-          if (data.results && data.results.length > 0) {
-            const address = data.results[0].formatted
-            setLocation({ lat: latitude, lng: longitude, address })
-            setValue('location', {
-              address,
-              coordinates: { lat: latitude, lng: longitude }
-            })
-            toast.success('Location detected successfully!')
-          } else {
-            setLocation({ lat: latitude, lng: longitude, address: 'Location detected' })
-            setValue('location', {
-              address: 'Location detected',
-              coordinates: { lat: latitude, lng: longitude }
-            })
-            toast.success('Location detected! Please enter the address manually.')
-          }
+          // For demo purposes, we'll use a simple address format
+          // In production, you would use a geocoding service like OpenCage, Google Maps, etc.
+          const address = `Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+          setLocation({ lat: latitude, lng: longitude, address })
+          setValue('location', {
+            address,
+            coordinates: { lat: latitude, lng: longitude }
+          })
+          toast.success('Location detected! Please verify and update the address if needed.')
         } catch (error) {
+          console.error('Error getting location:', error)
           setLocation({ lat: latitude, lng: longitude, address: 'Location detected' })
           setValue('location', {
             address: 'Location detected',
@@ -133,6 +123,16 @@ const IssueForm = () => {
       return
     }
 
+    if (!selectedCategory) {
+      toast.error('Please select a category')
+      return
+    }
+
+    if (!selectedPriority) {
+      toast.error('Please select a priority')
+      return
+    }
+
     if (images.length === 0) {
       toast.error('Please upload at least one image')
       return
@@ -140,6 +140,8 @@ const IssueForm = () => {
 
     createIssueMutation.mutate({
       ...data,
+      category: selectedCategory,
+      priority: selectedPriority,
       images
     })
   }
@@ -209,23 +211,29 @@ const IssueForm = () => {
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {categories.map((category) => (
-              <label
+              <button
                 key={category.value}
-                className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(category.value)
+                  setValue('category', category.value)
+                }}
+                className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-105 ${
+                  selectedCategory === category.value
+                    ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 shadow-md'
+                    : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm'
+                }`}
               >
-                <input
-                  {...register('category', { required: 'Category is required' })}
-                  type="radio"
-                  value={category.value}
-                  className="sr-only"
-                />
                 <div className="text-2xl mr-2">{category.icon}</div>
                 <span className="text-sm font-medium">{category.label}</span>
-              </label>
+              </button>
             ))}
           </div>
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+          )}
+          {!selectedCategory && (
+            <p className="text-gray-500 text-sm mt-1">Please select a category for your issue</p>
           )}
         </div>
 
@@ -236,24 +244,30 @@ const IssueForm = () => {
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {priorities.map((priority) => (
-              <label
+              <button
                 key={priority.value}
-                className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+                type="button"
+                onClick={() => {
+                  setSelectedPriority(priority.value)
+                  setValue('priority', priority.value)
+                }}
+                className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-105 ${
+                  selectedPriority === priority.value
+                    ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 shadow-md'
+                    : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm'
+                }`}
               >
-                <input
-                  {...register('priority', { required: 'Priority is required' })}
-                  type="radio"
-                  value={priority.value}
-                  className="sr-only"
-                />
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${priority.color}`}>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${priority.color}`}>
                   {priority.label}
                 </span>
-              </label>
+              </button>
             ))}
           </div>
           {errors.priority && (
             <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
+          )}
+          {!selectedPriority && (
+            <p className="text-gray-500 text-sm mt-1">Please select a priority level for your issue</p>
           )}
         </div>
 

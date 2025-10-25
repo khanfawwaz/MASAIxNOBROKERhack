@@ -7,6 +7,7 @@ from typing import List
 from models import User, UserCreate, UserLogin, UserResponse, Token
 from auth import verify_password, get_password_hash, create_access_token, get_current_user
 from database import get_database
+from email_service import email_service
 
 router = APIRouter()
 security = HTTPBearer()
@@ -57,6 +58,17 @@ async def register(user_data: UserCreate):
         updated_at=user_dict["updated_at"]
     )
     
+    # Send welcome email asynchronously
+    try:
+        await email_service.send_welcome_email(
+            user_dict["email"], 
+            user_dict["name"], 
+            user_dict["role"]
+        )
+    except Exception as e:
+        # Log error but don't fail registration
+        print(f"Failed to send welcome email: {e}")
+    
     return Token(access_token=access_token, token_type="bearer", user=user_response)
 
 @router.post("/login", response_model=Token)
@@ -89,6 +101,18 @@ async def login(user_credentials: UserLogin):
         created_at=user["created_at"],
         updated_at=user["updated_at"]
     )
+    
+    # Send login notification email asynchronously
+    try:
+        login_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        await email_service.send_login_notification(
+            user["email"], 
+            user["name"], 
+            login_time
+        )
+    except Exception as e:
+        # Log error but don't fail login
+        print(f"Failed to send login notification: {e}")
     
     return Token(access_token=access_token, token_type="bearer", user=user_response)
 

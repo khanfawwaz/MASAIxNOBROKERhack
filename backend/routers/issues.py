@@ -9,6 +9,7 @@ from pathlib import Path
 from models import Issue, IssueCreate, IssueUpdate, IssueResponse, CommentCreate, ProgressUpdateCreate, Comment, ProgressUpdate
 from auth import get_current_user
 from database import get_database
+from email_service import email_service
 
 router = APIRouter()
 
@@ -156,6 +157,9 @@ async def update_issue(
     update_data = issue_update.dict(exclude_unset=True)
     update_data["updated_at"] = datetime.utcnow()
     
+    # Check if status is being updated for email notification
+    status_changed = "status" in update_data and update_data["status"] != issue["status"]
+    
     result = await db.issues.update_one(
         {"_id": ObjectId(issue_id)},
         {"$set": update_data}
@@ -169,6 +173,24 @@ async def update_issue(
     
     # Return updated issue
     updated_issue = await db.issues.find_one({"_id": ObjectId(issue_id)})
+    
+    # Send email notification if status changed
+    if status_changed:
+        try:
+            # Get the reporter's information
+            reporter = await db.users.find_one({"_id": ObjectId(issue["reported_by"])})
+            if reporter:
+                await email_service.send_issue_update_email(
+                    reporter["email"],
+                    reporter["name"],
+                    issue["title"],
+                    update_data["status"],
+                    f"Issue status updated to {update_data['status']}",
+                    str(issue["_id"])
+                )
+        except Exception as e:
+            print(f"Failed to send issue update email: {e}")
+    
     return IssueResponse(**updated_issue)
 
 @router.post("/{issue_id}/comments", response_model=Comment)
@@ -210,6 +232,25 @@ async def add_comment(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Issue not found"
         )
+    
+    # Send email notification for new comment (only if not internal)
+    if not comment_data.is_internal:
+        try:
+            # Get the issue and reporter's information
+            issue = await db.issues.find_one({"_id": ObjectId(issue_id)})
+            if issue:
+                reporter = await db.users.find_one({"_id": ObjectId(issue["reported_by"])})
+                if reporter and reporter["_id"] != ObjectId(current_user_id):  # Don't email the commenter
+                    await email_service.send_issue_update_email(
+                        reporter["email"],
+                        reporter["name"],
+                        issue["title"],
+                        issue["status"],
+                        f"New comment added: {comment_data.text[:100]}{'...' if len(comment_data.text) > 100 else ''}",
+                        str(issue["_id"])
+                    )
+        except Exception as e:
+            print(f"Failed to send comment notification email: {e}")
     
     return Comment(**comment_dict)
 
