@@ -165,28 +165,35 @@ const IssueForm = () => {
   ]
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Report an Issue</h1>
-        <p className="text-gray-600">Help us make your community better by reporting issues</p>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8 text-center">
+        <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mb-4">
+          <span className="text-2xl">🏛️</span>
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Report a Civic Issue</h1>
+        <p className="text-gray-600">Help improve your community by reporting local issues</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Issue Title *
-          </label>
-          <input
-            {...register('title', { required: 'Title is required' })}
-            type="text"
-            className="input-field"
-            placeholder="Brief description of the issue"
-          />
-          {errors.title && (
-            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-          )}
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        {/* Basic Information */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Basic Information</h3>
+          
+          {/* Title */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Issue Title *
+            </label>
+            <input
+              {...register('title', { required: 'Title is required' })}
+              type="text"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="Brief description of the issue"
+            />
+            {errors.title && (
+              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+            )}
+          </div>
 
         {/* Description */}
         <div>
@@ -211,29 +218,23 @@ const IssueForm = () => {
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {categories.map((category) => (
-              <button
+              <label
                 key={category.value}
-                type="button"
-                onClick={() => {
-                  setSelectedCategory(category.value)
-                  setValue('category', category.value)
-                }}
-                className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-105 ${
-                  selectedCategory === category.value
-                    ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 shadow-md'
-                    : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm'
-                }`}
+                className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
               >
+                <input
+                  {...register('category', { required: 'Category is required' })}
+                  type="radio"
+                  value={category.value}
+                  className="sr-only"
+                />
                 <div className="text-2xl mr-2">{category.icon}</div>
                 <span className="text-sm font-medium">{category.label}</span>
-              </button>
+              </label>
             ))}
           </div>
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
-          )}
-          {!selectedCategory && (
-            <p className="text-gray-500 text-sm mt-1">Please select a category for your issue</p>
           )}
         </div>
 
@@ -244,84 +245,81 @@ const IssueForm = () => {
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {priorities.map((priority) => (
-              <button
+              <label
                 key={priority.value}
-                type="button"
-                onClick={() => {
-                  setSelectedPriority(priority.value)
-                  setValue('priority', priority.value)
-                }}
-                className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-105 ${
-                  selectedPriority === priority.value
-                    ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 shadow-md'
-                    : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm'
-                }`}
+                className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
               >
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${priority.color}`}>
+                <input
+                  {...register('priority', { required: 'Priority is required' })}
+                  type="radio"
+                  value={priority.value}
+                  className="sr-only"
+                />
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${priority.color}`}>
                   {priority.label}
                 </span>
-              </button>
+              </label>
             ))}
           </div>
           {errors.priority && (
             <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
           )}
-          {!selectedPriority && (
-            <p className="text-gray-500 text-sm mt-1">Please select a priority level for your issue</p>
-          )}
         </div>
 
         {/* Location */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Location *
-          </label>
-          <div className="space-y-3">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Location</h3>
+          
+          <div className="space-y-4">
             <button
               type="button"
               onClick={getCurrentLocation}
               disabled={isGettingLocation}
-              className="btn-secondary flex items-center gap-2"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <MapPin className="w-5 h-5" />
               {isGettingLocation ? 'Getting Location...' : 'Use Current Location'}
             </button>
             
             {location && (
-              <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-center gap-2 text-green-800">
+              <div className="p-4 bg-green-50 border-2 border-green-200 rounded-xl">
+                <div className="flex items-center gap-2 text-green-800 mb-2">
                   <CheckCircle className="w-5 h-5" />
                   <span className="font-medium">Location detected</span>
                 </div>
-                <p className="text-sm text-green-700 mt-1">{location.address}</p>
+                <p className="text-sm text-green-700">{location.address}</p>
               </div>
             )}
             
-            <input
-              {...register('location.address', { required: 'Location is required' })}
-              type="text"
-              className="input-field"
-              placeholder="Enter the exact location of the issue"
-              value={location?.address || ''}
-              onChange={(e) => {
-                if (location) {
-                  setLocation({ ...location, address: e.target.value })
-                }
-              }}
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Address *
+              </label>
+              <input
+                {...register('location.address', { required: 'Location is required' })}
+                type="text"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter the exact location of the issue"
+                value={location?.address || ''}
+                onChange={(e) => {
+                  if (location) {
+                    setLocation({ ...location, address: e.target.value })
+                  }
+                }}
+              />
+              {errors.location && (
+                <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
+              )}
+            </div>
           </div>
-          {errors.location && (
-            <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
-          )}
         </div>
 
         {/* Images */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Images * (Max 5 images)
-          </label>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Photos</h3>
+          
           <div className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-200">
               <input
                 type="file"
                 multiple
@@ -334,25 +332,25 @@ const IssueForm = () => {
                 htmlFor="image-upload"
                 className="cursor-pointer flex flex-col items-center"
               >
-                <Camera className="w-8 h-8 text-gray-400 mb-2" />
-                <span className="text-sm text-gray-600">Click to upload images</span>
-                <span className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB each</span>
+                <Camera className="w-12 h-12 text-gray-400 mb-4" />
+                <span className="text-lg font-medium text-gray-600 mb-2">Upload Photos</span>
+                <span className="text-sm text-gray-500">PNG, JPG up to 5MB each (max 5 photos)</span>
               </label>
             </div>
             
             {images.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {images.map((image, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative group">
                     <img
                       src={URL.createObjectURL(image)}
                       alt={`Upload ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
+                      className="w-full h-32 object-cover rounded-xl"
                     />
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -368,19 +366,19 @@ const IssueForm = () => {
           <button
             type="button"
             onClick={() => navigate('/citizen')}
-            className="btn-secondary flex-1"
+            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={createIssueMutation.isLoading}
-            className="btn-primary flex-1 flex items-center justify-center gap-2"
+            className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {createIssueMutation.isLoading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Reporting...
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                Reporting Issue...
               </>
             ) : (
               'Report Issue'

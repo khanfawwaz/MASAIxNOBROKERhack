@@ -102,11 +102,11 @@ const CitizenDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">My Issues</h1>
-          <p className="text-gray-600 mt-1">Track and manage your reported issues</p>
+          <p className="text-gray-600 mt-1">Track and manage your reported civic issues</p>
         </div>
         <button
           onClick={() => navigate('/issue/new')}
-          className="btn-primary flex items-center mt-4 sm:mt-0"
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center mt-4 sm:mt-0"
         >
           <Plus className="w-5 h-5 mr-2" />
           Report New Issue
@@ -115,10 +115,10 @@ const CitizenDashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-primary-600" />
+            <div className="p-3 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl">
+              <AlertCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Issues</p>
@@ -127,10 +127,10 @@ const CitizenDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-warning-100 rounded-lg">
-              <Clock className="w-6 h-6 text-warning-600" />
+            <div className="p-3 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl">
+              <Clock className="w-6 h-6 text-yellow-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Pending</p>
@@ -139,10 +139,10 @@ const CitizenDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-primary-600" />
+            <div className="p-3 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl">
+              <AlertCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">In Progress</p>
@@ -151,10 +151,10 @@ const CitizenDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-success-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-success-600" />
+            <div className="p-3 bg-gradient-to-r from-green-100 to-emerald-100 rounded-xl">
+              <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Completed</p>
@@ -165,7 +165,7 @@ const CitizenDashboard = () => {
       </div>
 
       {/* Filters */}
-      <div className="card">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -175,7 +175,7 @@ const CitizenDashboard = () => {
                 placeholder="Search issues..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10"
+                className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
@@ -183,7 +183,7 @@ const CitizenDashboard = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as IssueStatus | 'all')}
-              className="input-field"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -193,7 +193,7 @@ const CitizenDashboard = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="input-field"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               <option value="all">All Categories</option>
               <option value="pothole">Pothole</option>
@@ -212,19 +212,21 @@ const CitizenDashboard = () => {
       {/* Issues List */}
       <div className="space-y-4">
         {issues?.length === 0 ? (
-          <div className="card text-center py-12">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No issues found</h3>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 text-center py-16">
+            <div className="mx-auto w-16 h-16 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6">
+              <AlertCircle className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">No issues found</h3>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
               {searchTerm || statusFilter !== 'all' || categoryFilter !== 'all'
                 ? 'Try adjusting your filters to see more results.'
-                : "You haven't reported any issues yet. Click the button above to get started."
+                : "You haven't reported any civic issues yet. Help improve your community by reporting problems you encounter."
               }
             </p>
             {!searchTerm && statusFilter === 'all' && categoryFilter === 'all' && (
               <button
                 onClick={() => navigate('/issue/new')}
-                className="btn-primary"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Report Your First Issue
               </button>
@@ -232,32 +234,39 @@ const CitizenDashboard = () => {
           </div>
         ) : (
           issues?.map((issue: Issue) => (
-            <div key={issue.id} className="card hover:shadow-lg transition-shadow duration-200">
+            <div key={issue.id} className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:scale-[1.01]">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">{getCategoryIcon(issue.category)}</span>
-                    <h3 className="text-lg font-semibold text-gray-900">{issue.title}</h3>
-                    <span className={`${getStatusColor(issue.status)} flex items-center gap-1`}>
-                      {getStatusIcon(issue.status)}
-                      {issue.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 mb-3">{issue.description}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {issue.location.address}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-3xl">{getCategoryIcon(issue.category)}</div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{issue.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className={`${getStatusColor(issue.status)} flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium`}>
+                          {getStatusIcon(issue.status)}
+                          {issue.status.replace('_', ' ')}
+                        </span>
+                        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                          {issue.priority}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
+                  </div>
+                  <p className="text-gray-600 mb-4 line-clamp-2">{issue.description}</p>
+                  <div className="flex items-center gap-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-blue-500" />
+                      <span className="truncate max-w-xs">{issue.location.address}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-gray-400" />
                       {format(new Date(issue.createdAt), 'MMM dd, yyyy')}
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate(`/issue/${issue.id}`)}
-                  className="btn-secondary flex items-center gap-2"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2 ml-4"
                 >
                   <Eye className="w-4 h-4" />
                   View Details
