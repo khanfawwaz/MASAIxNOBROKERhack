@@ -133,12 +133,12 @@ const AdminDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage and track all reported issues</p>
+          <p className="text-gray-600 mt-1">Manage and track all reported civic issues</p>
         </div>
         <div className="flex gap-3 mt-4 sm:mt-0">
           <button
             onClick={() => navigate('/admin/issues')}
-            className="btn-secondary flex items-center"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center"
           >
             <MapPin className="w-5 h-5 mr-2" />
             View All Issues
@@ -148,10 +148,10 @@ const AdminDashboard = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-primary-600" />
+            <div className="p-3 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl">
+              <AlertCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Issues</p>
@@ -160,10 +160,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-warning-100 rounded-lg">
-              <Clock className="w-6 h-6 text-warning-600" />
+            <div className="p-3 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl">
+              <Clock className="w-6 h-6 text-yellow-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Pending</p>
@@ -172,10 +172,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-primary-600" />
+            <div className="p-3 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl">
+              <AlertCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">In Progress</p>
@@ -184,10 +184,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-2 bg-success-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-success-600" />
+            <div className="p-3 bg-gradient-to-r from-green-100 to-emerald-100 rounded-xl">
+              <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Completed</p>
@@ -199,7 +199,7 @@ const AdminDashboard = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Issues by Status</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Issues by Category</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={categoryChartData}>
@@ -236,7 +236,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Filters */}
-      <div className="card">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -246,7 +246,7 @@ const AdminDashboard = () => {
                 placeholder="Search issues..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10"
+                className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
@@ -254,7 +254,7 @@ const AdminDashboard = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as IssueStatus | 'all')}
-              className="input-field"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -264,7 +264,7 @@ const AdminDashboard = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="input-field"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               <option value="all">All Categories</option>
               <option value="pothole">Pothole</option>
@@ -279,7 +279,7 @@ const AdminDashboard = () => {
             <select
               value={timeFilter}
               onChange={(e) => setTimeFilter(e.target.value)}
-              className="input-field"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               <option value="all">All Time</option>
               <option value="today">Today</option>
@@ -291,12 +291,12 @@ const AdminDashboard = () => {
       </div>
 
       {/* Recent Issues */}
-      <div className="card">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900">Recent Issues</h3>
           <button
             onClick={() => navigate('/admin/issues')}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
           >
             View All
           </button>
@@ -304,39 +304,43 @@ const AdminDashboard = () => {
         
         <div className="space-y-4">
           {issues?.slice(0, 5).map((issue: Issue) => (
-            <div key={issue.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+            <div key={issue.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.01]">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">{getCategoryIcon(issue.category)}</span>
-                    <h4 className="text-lg font-semibold text-gray-900">{issue.title}</h4>
-                    <span className={`${getStatusColor(issue.status)} flex items-center gap-1`}>
-                      {getStatusIcon(issue.status)}
-                      {issue.status.replace('_', ' ')}
-                    </span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(issue.priority)}`}>
-                      {issue.priority}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 mb-3">{issue.description}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {issue.location.address}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-3xl">{getCategoryIcon(issue.category)}</div>
+                    <div className="flex-1">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{issue.title}</h4>
+                      <div className="flex items-center gap-2">
+                        <span className={`${getStatusColor(issue.status)} flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium`}>
+                          {getStatusIcon(issue.status)}
+                          {issue.status.replace('_', ' ')}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityColor(issue.priority)}`}>
+                          {issue.priority}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <User className="w-4 h-4" />
+                  </div>
+                  <p className="text-gray-600 mb-4 line-clamp-2">{issue.description}</p>
+                  <div className="flex items-center gap-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-blue-500" />
+                      <span className="truncate max-w-xs">{issue.location.address}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-gray-400" />
                       {issue.reportedBy}
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-gray-400" />
                       {format(new Date(issue.createdAt), 'MMM dd, yyyy')}
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate(`/issue/${issue.id}`)}
-                  className="btn-secondary flex items-center gap-2"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2 ml-4"
                 >
                   <Eye className="w-4 h-4" />
                   View Details

@@ -176,52 +176,55 @@ const IssueDetails = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-4 mb-8">
         <button
           onClick={() => navigate(-1)}
-          className="btn-secondary flex items-center gap-2"
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">Issue Details</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Issue Details</h1>
+          <p className="text-gray-600 mt-1">Track the progress and status of this civic issue</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Issue Info */}
-          <div className="card">
-            <div className="flex items-start gap-4 mb-4">
-              <span className="text-4xl">{getCategoryIcon(issue.category)}</span>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-start gap-6 mb-6">
+              <div className="text-5xl">{getCategoryIcon(issue.category)}</div>
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-3">
                   <h2 className="text-2xl font-bold text-gray-900">{issue.title}</h2>
-                  <span className={`${getStatusColor(issue.status)} flex items-center gap-1`}>
+                  <span className={`${getStatusColor(issue.status)} flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium`}>
                     {getStatusIcon(issue.status)}
                     {issue.status.replace('_', ' ')}
                   </span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(issue.priority)}`}>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(issue.priority)}`}>
                     {issue.priority}
                   </span>
                 </div>
-                <p className="text-gray-600 text-lg">{issue.description}</p>
+                <p className="text-gray-600 text-lg leading-relaxed">{issue.description}</p>
               </div>
             </div>
 
             {/* Images */}
             {issue.images && issue.images.length > 0 && (
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Images</h3>
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Photos</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {issue.images.map((image, index) => (
                     <img
                       key={index}
                       src={image}
                       alt={`Issue image ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
+                      className="w-full h-40 object-cover rounded-xl hover:scale-105 transition-transform duration-200 cursor-pointer"
                     />
                   ))}
                 </div>
@@ -229,20 +232,20 @@ const IssueDetails = () => {
             )}
 
             {/* Location */}
-            <div className="flex items-center gap-2 text-gray-600">
-              <MapPin className="w-5 h-5" />
-              <span>{issue.location.address}</span>
+            <div className="flex items-center gap-3 text-gray-600 bg-gray-50 p-4 rounded-xl">
+              <MapPin className="w-5 h-5 text-blue-500" />
+              <span className="font-medium">{issue.location.address}</span>
             </div>
           </div>
 
           {/* Comments */}
-          <div className="card">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Comments</h3>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">Comments & Updates</h3>
               {user?.role === 'admin' && (
                 <button
                   onClick={() => setShowInternalComments(!showInternalComments)}
-                  className="btn-secondary flex items-center gap-2"
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2"
                 >
                   {showInternalComments ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   {showInternalComments ? 'Hide Internal' : 'Show Internal'}
@@ -252,18 +255,18 @@ const IssueDetails = () => {
 
             {/* Add Comment */}
             <div className="mb-6">
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <input
                   type="text"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className="input-field flex-1"
+                  placeholder="Add a comment or update..."
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
                 <button
                   onClick={handleAddComment}
                   disabled={addCommentMutation.isLoading}
-                  className="btn-primary flex items-center gap-2"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
                   Send
@@ -276,19 +279,19 @@ const IssueDetails = () => {
               {issue.comments
                 ?.filter(comment => user?.role === 'admin' || !comment.isInternal)
                 .map((comment) => (
-                  <div key={comment.id} className="border-l-4 border-primary-200 pl-4">
-                    <div className="flex items-center gap-2 mb-1">
+                  <div key={comment.id} className="bg-gray-50 rounded-xl p-4 border-l-4 border-blue-200">
+                    <div className="flex items-center gap-3 mb-2">
                       <span className="font-medium text-gray-900">{comment.authorName}</span>
                       <span className="text-sm text-gray-500">
                         {format(new Date(comment.createdAt), 'MMM dd, yyyy HH:mm')}
                       </span>
                       {comment.isInternal && (
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                        <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">
                           Internal
                         </span>
                       )}
                     </div>
-                    <p className="text-gray-700">{comment.text}</p>
+                    <p className="text-gray-700 leading-relaxed">{comment.text}</p>
                   </div>
                 ))}
             </div>
@@ -298,31 +301,43 @@ const IssueDetails = () => {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Issue Details */}
-          <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Issue Details</h3>
-            <div className="space-y-3">
-              <div>
-                <span className="text-sm font-medium text-gray-600">Reported by</span>
-                <p className="text-gray-900">{issue.reportedBy}</p>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">Issue Information</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <User className="w-5 h-5 text-blue-500" />
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Reported by</span>
+                  <p className="text-gray-900 font-medium">{issue.reportedBy}</p>
+                </div>
               </div>
-              <div>
-                <span className="text-sm font-medium text-gray-600">Created</span>
-                <p className="text-gray-900">
-                  {format(new Date(issue.createdAt), 'MMM dd, yyyy HH:mm')}
-                </p>
+              <div className="flex items-center gap-3">
+                <Calendar className="w-5 h-5 text-blue-500" />
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Created</span>
+                  <p className="text-gray-900 font-medium">
+                    {format(new Date(issue.createdAt), 'MMM dd, yyyy HH:mm')}
+                  </p>
+                </div>
               </div>
-              <div>
-                <span className="text-sm font-medium text-gray-600">Last Updated</span>
-                <p className="text-gray-900">
-                  {format(new Date(issue.updatedAt), 'MMM dd, yyyy HH:mm')}
-                </p>
+              <div className="flex items-center gap-3">
+                <Clock className="w-5 h-5 text-blue-500" />
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Last Updated</span>
+                  <p className="text-gray-900 font-medium">
+                    {format(new Date(issue.updatedAt), 'MMM dd, yyyy HH:mm')}
+                  </p>
+                </div>
               </div>
               {issue.resolvedAt && (
-                <div>
-                  <span className="text-sm font-medium text-gray-600">Resolved</span>
-                  <p className="text-gray-900">
-                    {format(new Date(issue.resolvedAt), 'MMM dd, yyyy HH:mm')}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <div>
+                    <span className="text-sm font-medium text-gray-600">Resolved</span>
+                    <p className="text-gray-900 font-medium">
+                      {format(new Date(issue.resolvedAt), 'MMM dd, yyyy HH:mm')}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -330,27 +345,27 @@ const IssueDetails = () => {
 
           {/* Admin Actions */}
           {user?.role === 'admin' && (
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Admin Actions</h3>
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Admin Actions</h3>
               
               {/* Status Update */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     Update Status
                   </label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <button
                       onClick={() => handleUpdateStatus('in_progress')}
                       disabled={updateStatusMutation.isLoading || issue.status === 'in_progress'}
-                      className="btn-warning w-full text-sm"
+                      className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Mark as In Progress
                     </button>
                     <button
                       onClick={() => handleUpdateStatus('completed')}
                       disabled={updateStatusMutation.isLoading || issue.status === 'completed'}
-                      className="btn-success w-full text-sm"
+                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Mark as Completed
                     </button>
@@ -358,14 +373,14 @@ const IssueDetails = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     Status Description
                   </label>
                   <textarea
                     value={newProgressDescription}
                     onChange={(e) => setNewProgressDescription(e.target.value)}
                     placeholder="Describe the progress or resolution..."
-                    className="input-field"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     rows={3}
                   />
                 </div>
@@ -375,21 +390,21 @@ const IssueDetails = () => {
 
           {/* Progress Updates */}
           {issue.progress && issue.progress.length > 0 && (
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Progress Updates</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Progress Updates</h3>
+              <div className="space-y-4">
                 {issue.progress.map((update) => (
-                  <div key={update.id} className="border-l-4 border-primary-200 pl-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(update.status)}`}>
+                  <div key={update.id} className="bg-gray-50 rounded-xl p-4 border-l-4 border-blue-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(update.status)}`}>
                         {update.status.replace('_', ' ')}
                       </span>
                       <span className="text-sm text-gray-500">
                         {format(new Date(update.createdAt), 'MMM dd, HH:mm')}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-700">{update.description}</p>
-                    <p className="text-xs text-gray-500">by {update.updatedByName}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">{update.description}</p>
+                    <p className="text-xs text-gray-500 font-medium">by {update.updatedByName}</p>
                   </div>
                 ))}
               </div>

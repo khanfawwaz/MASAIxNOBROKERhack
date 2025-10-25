@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import IssueForm from './pages/IssueForm'
 import IssueDetails from './pages/IssueDetails'
 import Profile from './pages/Profile'
+import PublicDashboard from './pages/PublicDashboard'
 
 function App() {
   const { user, loading } = useAuth()
@@ -22,6 +23,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+      <Route path="/public" element={<PublicDashboard />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to={user?.role === 'admin' ? '/admin' : '/citizen'} />} />
         <Route path="citizen" element={user?.role === 'citizen' ? <CitizenDashboard /> : <Navigate to="/login" />} />
